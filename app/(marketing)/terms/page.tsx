@@ -19,7 +19,7 @@ export default function TermsPage() {
 
         <h2 className="text-2xl font-bold mt-12 mb-4">2. Description of Service</h2>
         <p className="mb-6">
-          KudoGrid provides a micro-SaaS platform for collecting and embedding customer reviews. The service is provided "as is" and "as available".
+          KudoGrid provides a micro-SaaS platform for collecting and embedding customer reviews. The service is provided &quot;as is&quot; and &quot;as available&quot;.
         </p>
 
         <h2 className="text-2xl font-bold mt-12 mb-4">3. User Conduct and Responsibilities</h2>

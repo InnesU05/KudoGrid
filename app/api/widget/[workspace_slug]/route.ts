@@ -152,7 +152,7 @@ export async function GET(
         'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300', // Vercel Edge Caching
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

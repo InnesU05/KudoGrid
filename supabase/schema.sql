@@ -52,3 +52,26 @@ create policy "Anyone can insert reviews" on public.reviews
 -- The public can read approved reviews for the iframe widget
 create policy "Public can view approved reviews" on public.reviews
   for select using (is_approved = true);
+
+-- 3. Trigger to auto-create public.users row from auth.users
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = ''
+as $$
+declare
+  base_slug text;
+  final_slug text;
+begin
+  base_slug := lower(regexp_replace(coalesce(new.email, 'workspace'), '@.*$', ''));
+  final_slug := base_slug || '-' || substr(md5(random()::text), 1, 6);
+
+  insert into public.users (id, email, workspace_slug)
+  values (new.id, new.email, final_slug);
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();

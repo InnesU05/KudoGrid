@@ -63,7 +63,7 @@ export default function LandingPage() {
                   {[1,2,3,4,5].map(i => <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />)}
                 </div>
                 <div className="h-20 bg-slate-50 border border-slate-200 p-3 mb-4 text-sm text-slate-400 flex items-start">
-                  "KudoGrid is exactly what we needed..."
+                  &quot;KudoGrid is exactly what we needed...&quot;
                 </div>
                 <div className="h-10 bg-emerald-600 w-full flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-emerald-700 transition-colors">
                   SUBMIT REVIEW
@@ -85,7 +85,7 @@ export default function LandingPage() {
                   <div className="flex gap-1 mb-3">
                     {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 text-slate-800 fill-current" />)}
                   </div>
-                  <p className="text-sm text-slate-700 mb-4">"The easiest tool I've used this year. Setup took 3 minutes and it looks incredibly professional on our site."</p>
+                  <p className="text-sm text-slate-700 mb-4">&quot;The easiest tool I&apos;ve used this year. Setup took 3 minutes and it looks incredibly professional on our site.&quot;</p>
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-slate-200 rounded-full" />
                     <div>

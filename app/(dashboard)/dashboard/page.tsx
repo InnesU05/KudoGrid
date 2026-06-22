@@ -1,16 +1,37 @@
 import { ExternalLink, Code, CreditCard, CheckCircle2, XCircle } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { updateReviewStatus } from '@/app/actions/dashboardActions';
 
-// In a real app, we would fetch this via the Supabase Server Client
 export default async function DashboardPage() {
-  const workspaceSlug = 'your-workspace-slug';
-  // Assuming standard domain or localhost
-  const publicLink = `https://kudogrid.com/${workspaceSlug}/submit`;
-  const embedCode = `<iframe src="https://kudogrid.com/api/widget/${workspaceSlug}" width="100%" height="600px" frameborder="0"></iframe>`;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  const reviews = [
-    { id: 1, name: 'Alice Smith', role: 'Founder, TechFlow', rating: 5, text: 'KudoGrid changed how we collect feedback. Absolutely seamless.', approved: true },
-    { id: 2, name: 'John Doe', role: 'CTO, DataSync', rating: 4, text: 'Great tool, simple to use. Highly recommended for fast setups.', approved: false },
-  ];
+  if (!user) {
+    redirect('/login');
+  }
+
+  // Get workspace slug
+  const { data: userData } = await supabase
+    .from('users')
+    .select('workspace_slug')
+    .eq('id', user.id)
+    .single();
+
+  const workspaceSlug = userData?.workspace_slug || 'pending';
+  
+  // Assuming standard domain in production, local in dev
+  const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://kudogrid.com';
+  const publicLink = `${baseUrl}/${workspaceSlug}/submit`;
+  const embedCode = `<iframe src="${baseUrl}/api/widget/${workspaceSlug}" width="100%" height="600px" frameborder="0"></iframe>`;
+
+  const { data: reviews } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  const safeReviews = reviews || [];
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-emerald-200">
@@ -70,7 +91,7 @@ export default async function DashboardPage() {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold tracking-tight">Recent Submissions</h2>
-            <span className="text-sm font-medium text-slate-500">{reviews.length} total</span>
+            <span className="text-sm font-medium text-slate-500">{safeReviews.length} total</span>
           </div>
 
           <div className="border border-slate-200 overflow-hidden overflow-x-auto">
@@ -84,36 +105,46 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
-                {reviews.map((review) => (
+                {safeReviews.map((review) => (
                   <tr key={review.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4 align-top">
-                      <div className="font-medium text-slate-900">{review.name}</div>
-                      <div className="text-slate-500 text-xs mt-1">{review.role}</div>
+                      <div className="font-medium text-slate-900">{review.customer_name}</div>
+                      <div className="text-slate-500 text-xs mt-1">{review.customer_role}</div>
                     </td>
                     <td className="px-6 py-4 align-top">
                       <div className="flex text-slate-400">
                         {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
                       </div>
                     </td>
-                    <td className="px-6 py-4 align-top text-slate-700">
-                      {review.text}
+                    <td className="px-6 py-4 align-top text-slate-700 whitespace-pre-wrap">
+                      {review.review_text}
                     </td>
                     <td className="px-6 py-4 align-top text-right">
-                      {review.approved ? (
-                        <button className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider border border-emerald-200 rounded-sm hover:bg-emerald-100 transition-colors">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          Approved
-                        </button>
+                      {review.is_approved ? (
+                        <form action={async () => {
+                          'use server';
+                          await updateReviewStatus(review.id, false);
+                        }}>
+                          <button type="submit" className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider border border-emerald-200 rounded-sm hover:bg-emerald-100 transition-colors">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Approved
+                          </button>
+                        </form>
                       ) : (
-                        <button className="inline-flex items-center gap-1.5 text-slate-600 bg-white px-2.5 py-1 text-xs font-semibold uppercase tracking-wider border border-slate-200 rounded-sm hover:border-slate-400 transition-colors hover:text-slate-900">
-                          <XCircle className="w-3.5 h-3.5" />
-                          Hidden
-                        </button>
+                        <form action={async () => {
+                          'use server';
+                          await updateReviewStatus(review.id, true);
+                        }}>
+                          <button type="submit" className="inline-flex items-center gap-1.5 text-slate-600 bg-white px-2.5 py-1 text-xs font-semibold uppercase tracking-wider border border-slate-200 rounded-sm hover:border-slate-400 transition-colors hover:text-slate-900">
+                            <XCircle className="w-3.5 h-3.5" />
+                            Hidden
+                          </button>
+                        </form>
                       )}
                     </td>
                   </tr>
                 ))}
-                {reviews.length === 0 && (
+                {safeReviews.length === 0 && (
                   <tr>
                     <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
                       No reviews collected yet. Share your link to get started.
