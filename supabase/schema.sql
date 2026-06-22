@@ -31,8 +31,8 @@ alter table public.reviews enable row level security;
 create policy "Users can view own data" on public.users
   for select using (auth.uid() = id);
 
-create policy "Users can update own data" on public.users
-  for update using (auth.uid() = id);
+-- Note: UPDATE policy removed to prevent users from spoofing subscription_status via the REST API.
+-- Updates to user profiles should be handled strictly via secure Server Actions.
 
 -- Policies for Reviews Table
 -- Workspace owners can fully manage their own reviews
