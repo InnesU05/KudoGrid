@@ -20,8 +20,8 @@ if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) 
 }
 
 export async function proxy(request: NextRequest) {
-  // 1. Rate Limiting for Public Submission Routes
-  if (request.nextUrl.pathname.includes('/submit')) {
+  // 1. Rate Limiting for Public Submission Routes (POST only)
+  if (request.method === 'POST' && request.nextUrl.pathname.includes('/submit')) {
     const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1';
     
     if (ratelimit) {

@@ -45,9 +45,9 @@ create policy "Users can update own reviews" on public.reviews
 create policy "Users can delete own reviews" on public.reviews
   for delete using (auth.uid() = user_id);
 
--- Anonymous users can ONLY insert. 
+-- Anonymous users can ONLY insert unapproved reviews. 
 create policy "Anyone can insert reviews" on public.reviews
-  for insert with check (true);
+  for insert with check (is_approved = false);
 
 -- The public can read approved reviews for the iframe widget
 create policy "Public can view approved reviews" on public.reviews

@@ -16,6 +16,10 @@ export async function submitReviewAction(
     return { error: 'Invalid input' };
   }
 
+  if (name.length > 100 || (role && role.length > 100) || reviewText.length > 2000) {
+    return { error: 'Input too long. Please keep reviews under 2000 characters.' };
+  }
+
   const supabase = await createClient();
 
   // 1. Find user_id
