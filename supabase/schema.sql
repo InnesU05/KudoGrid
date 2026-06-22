@@ -3,7 +3,7 @@ create extension if not exists "uuid-ossp";
 
 -- 1. Users Table (matches Supabase Auth)
 create table public.users (
-  id uuid references auth.users not null primary key,
+  id uuid references auth.users on delete cascade not null primary key,
   email text not null,
   workspace_slug text unique not null,
   stripe_customer_id text,
@@ -14,7 +14,7 @@ create table public.users (
 -- 2. Reviews Table
 create table public.reviews (
   id uuid default uuid_generate_v4() primary key,
-  user_id uuid references public.users(id) not null,
+  user_id uuid references public.users(id) on delete cascade not null,
   customer_name text not null,
   customer_role text,
   rating integer not null check (rating >= 1 and rating <= 5),

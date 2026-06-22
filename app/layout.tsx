@@ -5,6 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://kudogrid.com'),
   title: 'KudoGrid | Collect & Embed Reviews Effortlessly',
   description: 'The easiest way to collect text reviews and embed a Wall of Love on your website. Zero-touch, high-converting, and beautiful.',
   keywords: 'customer reviews, testimonials widget, embed reviews, wall of love, collect feedback, micro-SaaS',

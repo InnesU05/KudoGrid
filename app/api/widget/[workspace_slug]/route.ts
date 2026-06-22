@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import DOMPurify from 'isomorphic-dompurify';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
 
 export async function GET(
   request: Request,
@@ -8,7 +8,10 @@ export async function GET(
 ) {
   try {
     const workspaceSlug = (await params).workspace_slug;
-    const supabase = await createClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
     // 1. Get user_id for the workspace
     const { data: userData, error: userError } = await supabase
