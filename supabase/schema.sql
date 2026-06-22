@@ -23,6 +23,10 @@ create table public.reviews (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Performance Indexes
+create index reviews_user_id_idx on public.reviews(user_id);
+create index reviews_is_approved_idx on public.reviews(is_approved);
+
 -- Security: Enable Row Level Security (RLS)
 alter table public.users enable row level security;
 alter table public.reviews enable row level security;

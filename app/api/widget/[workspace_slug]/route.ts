@@ -18,7 +18,10 @@ export async function GET(
       .single();
 
     if (userError || !userData) {
-      return NextResponse.json({ error: 'Workspace not found' }, { status: 404 });
+      return new NextResponse(
+        '<div style="font-family: sans-serif; color: #64748b; padding: 20px; text-align: center; border: 1px dashed #cbd5e1;">KudoGrid Widget: Workspace not found</div>',
+        { status: 404, headers: { 'Content-Type': 'text/html' } }
+      );
     }
 
     // 2. Fetch approved reviews for that user

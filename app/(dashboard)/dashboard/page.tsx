@@ -2,6 +2,7 @@ import { ExternalLink, Code, CreditCard, CheckCircle2, XCircle } from 'lucide-re
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { updateReviewStatus } from '@/app/actions/dashboardActions';
+import LogoutButton from '@/app/components/LogoutButton';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -44,10 +45,13 @@ export default async function DashboardPage() {
           </div>
           <span className="font-semibold tracking-tight">kudogrid</span>
         </div>
-        <button className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">
-          <CreditCard className="w-4 h-4" />
-          MANAGE BILLING
-        </button>
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+            <CreditCard className="w-4 h-4" />
+            MANAGE BILLING
+          </button>
+          <LogoutButton />
+        </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-8 py-12">

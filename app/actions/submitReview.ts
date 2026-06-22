@@ -8,9 +8,9 @@ export async function submitReviewAction(
   workspaceSlug: string, 
   rating: number
 ) {
-  const name = formData.get('name') as string;
-  const role = formData.get('role') as string;
-  const reviewText = formData.get('review') as string;
+  const name = (formData.get('name') as string)?.trim();
+  const role = (formData.get('role') as string)?.trim();
+  const reviewText = (formData.get('review') as string)?.trim();
 
   if (!name || !reviewText || rating < 1 || rating > 5) {
     return { error: 'Invalid input' };
