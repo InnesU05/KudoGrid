@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: { workspace_slug: string } }
+  { params }: { params: Promise<{ workspace_slug: string }> }
 ) {
   try {
     const workspaceSlug = await Promise.resolve(params.workspace_slug);

@@ -1,6 +1,6 @@
 import { Star } from 'lucide-react';
 
-export default async function SubmitReviewPage({ params }: { params: { workspace_slug: string } }) {
+export default async function SubmitReviewPage({ params }: { params: Promise<{ workspace_slug: string }> }) {
   // Wait for params in Next.js 15
   const workspaceSlug = await Promise.resolve(params.workspace_slug);
 
