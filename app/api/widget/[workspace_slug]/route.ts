@@ -42,9 +42,9 @@ export async function GET(
     // 3. Sanitise review texts just in case (defense in depth, though we should sanitise on insert too)
     const sanitisedReviews = reviews.map((review) => ({
       ...review,
-      customer_name: DOMPurify.sanitize(review.customer_name),
-      customer_role: review.customer_role ? DOMPurify.sanitize(review.customer_role) : null,
-      review_text: DOMPurify.sanitize(review.review_text),
+      customer_name: DOMPurify.sanitize(review.customer_name, { ALLOWED_TAGS: [] }),
+      customer_role: review.customer_role ? DOMPurify.sanitize(review.customer_role, { ALLOWED_TAGS: [] }) : null,
+      review_text: DOMPurify.sanitize(review.review_text, { ALLOWED_TAGS: [] }),
     }));
 
     // 4. Generate the HTML response

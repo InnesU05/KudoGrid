@@ -26,21 +26,26 @@ export async function proxy(request: NextRequest) {
     const ip = xff ? xff.split(',')[0].trim() : '127.0.0.1';
     
     if (ratelimit) {
-      const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`);
+      try {
+        const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`);
 
-      if (!success) {
-        return new NextResponse(
-          JSON.stringify({ error: 'Too many requests. Please try again later.' }),
-          {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
-              'X-RateLimit-Limit': limit.toString(),
-              'X-RateLimit-Remaining': remaining.toString(),
-              'X-RateLimit-Reset': reset.toString(),
-            },
-          }
-        );
+        if (!success) {
+          return new NextResponse(
+            JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+            {
+              status: 429,
+              headers: {
+                'Content-Type': 'application/json',
+                'X-RateLimit-Limit': limit.toString(),
+                'X-RateLimit-Remaining': remaining.toString(),
+                'X-RateLimit-Reset': reset.toString(),
+              },
+            }
+          );
+        }
+      } catch (error) {
+        // Fallback: If Upstash is down or errors, allow the request to pass through
+        console.error('Rate limiting failed:', error);
       }
     }
   }
