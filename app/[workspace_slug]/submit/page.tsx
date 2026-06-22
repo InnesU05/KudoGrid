@@ -2,7 +2,7 @@ import { Star } from 'lucide-react';
 
 export default async function SubmitReviewPage({ params }: { params: Promise<{ workspace_slug: string }> }) {
   // Wait for params in Next.js 15
-  const workspaceSlug = await Promise.resolve(params.workspace_slug);
+  const workspaceSlug = (await params).workspace_slug;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex items-center justify-center p-4">

@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ workspace_slug: string }> }
 ) {
   try {
-    const workspaceSlug = await Promise.resolve(params.workspace_slug);
+    const workspaceSlug = (await params).workspace_slug;
     const supabase = await createClient();
 
     // 1. Get user_id for the workspace
