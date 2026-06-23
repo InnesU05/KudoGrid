@@ -1,0 +1,13 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#000" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="#1b8b3d">
+    <!-- Hand base -->
+    <path d="M 40 100 L 90 100 C 90 100, 95 40, 115 30 C 135 20, 150 40, 130 75 C 130 75, 160 70, 180 75 C 200 80, 205 95, 190 110 C 205 115, 205 130, 190 145 C 205 150, 200 170, 185 180 C 170 190, 120 195, 40 190 Z" />
+    <!-- Fingers dividers -->
+    <path d="M 170 110 L 130 110" fill="none" stroke-width="14"/>
+    <path d="M 175 145 L 135 145" fill="none" stroke-width="14"/>
+    <!-- Face -->
+    <circle cx="95" cy="120" r="8" fill="#000" stroke="none"/>
+    <circle cx="125" cy="115" r="8" fill="#000" stroke="none"/>
+    <path d="M 90 145 Q 115 165 145 140" stroke-width="12" fill="none" />
+  </g>
+</svg>

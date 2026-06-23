@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { LayoutGrid, Code, Share2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'KudoGrid | Turn your best reviews into your best salespeople',
-  description: 'Automatically pull 5-star reviews from Google, Twitter, and custom forms into beautiful, animated UI widgets for your website.',
+  title: 'KudoGrid | Your automated trust engine',
+  description: 'Turn 5-star Google and Twitter reviews into beautiful, high-converting testimonial walls in 60 seconds.',
 };
 
 const jsonLd = {
@@ -20,295 +19,269 @@ const jsonLd = {
   },
 };
 
-const Mascot = ({ className = '' }: { className?: string }) => (
-  <svg className={className} width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Kudo Mascot">
-    <path d="M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 19.5492 5.53934 22.7388 8.05886 24.9042L6 28L9.93291 26.6888C11.7588 27.5348 13.8188 28 16 28Z" fill="#0f172a" />
-    <circle cx="12" cy="15" r="1.5" fill="white" />
-    <circle cx="20" cy="15" r="1.5" fill="white" />
-    <path d="M13 19C13 19 14.5 21 16 21C17.5 21 19 19 19 19" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    <path d="M16 0L17.5 3L21 3.5L18 6L19 9.5L16 7.5L13 9.5L14 6L11 3.5L14.5 3L16 0Z" fill="#10b981" />
+const MascotSVG = ({ className = '' }: { className?: string }) => (
+  <svg className={className} width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#000" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="#1b8b3d">
+      <path d="M 40 100 L 90 100 C 90 100, 95 40, 115 30 C 135 20, 150 40, 130 75 C 130 75, 160 70, 180 75 C 200 80, 205 95, 190 110 C 205 115, 205 130, 190 145 C 205 150, 200 170, 185 180 C 170 190, 120 195, 40 190 Z" />
+      <path d="M 170 110 L 130 110" fill="none" strokeWidth="12" />
+      <path d="M 175 145 L 135 145" fill="none" strokeWidth="12" />
+      <circle cx="95" cy="120" r="8" fill="#000" stroke="none" />
+      <circle cx="125" cy="115" r="8" fill="#000" stroke="none" />
+      <path d="M 90 145 Q 115 165 145 140" strokeWidth="10" fill="none" />
+    </g>
+    <g stroke="#000" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none">
+      <path d="M 100 195 L 100 235 L 115 235" />
+      <path d="M 140 195 L 140 235 L 155 235" />
+    </g>
   </svg>
 );
 
-const TwitterCard = ({ name, handle, text }: { name: string; handle: string; text: string }) => (
-  <div className="w-80 flex-shrink-0 bg-white border border-slate-200 p-6 shadow-sm rounded-none">
-    <div className="flex items-center gap-3 mb-4">
-      <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center font-bold text-slate-500">
-        {name.charAt(0)}
-      </div>
-      <div>
-        <div className="flex items-center gap-1">
-          <span className="font-bold text-slate-900 text-sm">{name}</span>
-          <svg className="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-          </svg>
-        </div>
-        <div className="text-slate-500 text-xs">@{handle}</div>
-      </div>
+const SkateboardMascot = ({ className = '' }: { className?: string }) => (
+  <div className={`relative ${className}`}>
+    <MascotSVG className="w-full h-full relative z-10" />
+    {/* Skateboard */}
+    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[110%] h-4 bg-[#000] rounded-full z-0 transform -rotate-2">
+      <div className="absolute -bottom-2 left-4 w-4 h-4 bg-[#4a5568] rounded-full border-2 border-black" />
+      <div className="absolute -bottom-2 right-4 w-4 h-4 bg-[#4a5568] rounded-full border-2 border-black" />
     </div>
-    <p className="text-slate-700 text-sm leading-relaxed">{text}</p>
   </div>
 );
 
-const GoogleCard = ({ name, text }: { name: string; text: string }) => (
-  <div className="w-80 flex-shrink-0 bg-white border border-slate-200 p-6 shadow-sm rounded-none">
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center font-bold text-emerald-700">
-          {name.charAt(0)}
+const NotificationCard = ({ text, time, platform }: { text: string; time: string; platform: 'X' | 'Google' }) => (
+  <div className="bg-white rounded-2xl p-4 shadow-xl border border-slate-100 max-w-sm w-full font-sans">
+    <div className="flex justify-between items-center mb-2">
+      <div className="flex items-center gap-2">
+        <div className={`w-6 h-6 rounded-md flex items-center justify-center text-white text-xs font-bold ${platform === 'X' ? 'bg-slate-900' : 'bg-[#4285F4]'}`}>
+          {platform === 'X' ? 'X' : 'G'}
         </div>
-        <div>
-          <span className="font-bold text-slate-900 text-sm block">{name}</span>
-          <span className="text-slate-400 text-xs">a day ago</span>
-        </div>
+        <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">New Review</span>
       </div>
-      <svg className="w-5 h-5 text-[#4285F4]" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-      </svg>
+      <span className="text-xs text-slate-400">{time}</span>
     </div>
-    <div className="flex text-emerald-600 mb-3 text-lg">★★★★★</div>
-    <p className="text-slate-700 text-sm leading-relaxed">{text}</p>
+    <div className="font-bold text-sm text-[#111827] mb-1">KudoGrid</div>
+    <div className="text-sm text-slate-600 leading-relaxed">{text}</div>
   </div>
 );
-
-const MOCK_REVIEWS = [
-  <TwitterCard key="1" name="Sarah Jenkins" handle="sjenkins_dev" text="I installed KudoGrid in 2 minutes. Our conversion rate instantly jumped 14%. The zero-code embed is actually zero code." />,
-  <GoogleCard key="2" name="Marcus Aurelius" text="Incredible micro-SaaS. Cleanest widgets I've ever seen, completely destroyed the bloated alternatives we were paying $50/mo for." />,
-  <TwitterCard key="3" name="David Chen" handle="davidchen" text="Finally a wall of love that doesn't look like it was built in 2012. The minimalist templates fit perfectly into our brand." />,
-  <GoogleCard key="4" name="Elena Rust" text="The ROI is absurd. Set it up once, and now 5-star Google reviews automatically stream onto our checkout page." />,
-];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-emerald-200">
+    <div className="min-h-screen bg-[#f8f7f2] text-[#111827] font-sans selection:bg-[#1b8b3d] selection:text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <header className="border-b border-slate-100 bg-white sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <Mascot />
-            <span className="font-bold tracking-tight text-xl">KudoGrid</span>
+      {/* HEADER */}
+      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+        <div className="bg-white rounded-full px-6 py-3 shadow-sm border border-slate-200 flex items-center gap-12 w-full max-w-[800px]">
+          <Link href="/" className="flex items-center gap-2">
+            <MascotSVG className="w-8 h-8" />
+            <span className="font-extrabold text-xl tracking-tight text-[#111827]">KUDOGRID</span>
           </Link>
-          <nav className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-            <Link href="#features" className="hover:text-slate-900 transition-colors">Features</Link>
-            <Link href="#demo" className="hover:text-slate-900 transition-colors">Integrations</Link>
-            <Link href="#pricing" className="hover:text-slate-900 transition-colors">Pricing</Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">
-              Log in
-            </Link>
-            <Link href="/login" className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 transition-colors">
-              Start for free
-            </Link>
-          </div>
+          <nav className="hidden md:flex flex-1" />
+          <Link href="/login" className="bg-[#1b8b3d] hover:bg-[#156e30] text-white font-bold text-sm px-6 py-2.5 rounded-full transition-colors whitespace-nowrap">
+            Get started
+          </Link>
         </div>
       </header>
 
-      <main>
+      <main className="overflow-hidden">
         {/* HERO SECTION */}
-        <section className="pt-32 pb-24 px-6 max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 overflow-hidden">
+        <section className="pt-48 pb-24 px-6 max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 text-center lg:text-left z-10">
-            <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-slate-900">
-              Turn your best reviews into your <span className="text-emerald-600">best salespeople.</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-bold uppercase tracking-widest mb-8 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[#1b8b3d]"></span>
+              The Zero-Code Widget
+            </div>
+            <h1 className="text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6 text-[#111827]">
+              Your automated <span className="text-[#1b8b3d]">trust engine.</span>
             </h1>
-            <p className="text-lg text-slate-600 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Automatically pull 5-star reviews from Google, Twitter, and custom forms into beautiful, animated UI widgets for your website. No coding required.
+            <p className="text-xl text-slate-600 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+              All the boring review collection you know you should do but never get round to. Turn 5-star Google and Twitter reviews into beautiful, high-converting testimonial walls in 60 seconds.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-              <Link href="/login" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg px-8 py-4 w-full sm:w-auto transition-colors text-center">
-                Build your Wall of Love — Free
+              <Link href="/login" className="bg-[#1b8b3d] hover:bg-[#156e30] text-white font-bold text-lg px-8 py-4 rounded-full w-full sm:w-auto transition-colors text-center shadow-lg shadow-green-900/20">
+                Hire Kudo
               </Link>
-              <p className="text-sm text-slate-400 font-medium mt-2 sm:mt-0">No credit card required.</p>
+              <Link href="#demo" className="text-slate-600 font-bold hover:text-[#111827] px-6 py-4 transition-colors">
+                See how it works &rarr;
+              </Link>
             </div>
           </div>
 
-          <div className="flex-1 w-full lg:w-auto relative">
-            {/* Minimalist Dashboard Mock */}
-            <div className="relative z-10 bg-white border border-slate-200 shadow-xl p-4 w-full max-w-md mx-auto lg:ml-auto flex flex-col gap-4">
-              <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
-                <span className="font-bold text-sm">Dashboard</span>
-                <span className="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-1">Widget Active</span>
+          <div className="flex-1 w-full lg:w-auto relative flex justify-center lg:justify-end">
+            <div className="relative">
+              <MascotSVG className="w-[300px] h-[300px] lg:w-[450px] lg:h-[450px]" />
+              
+              {/* Hand-drawn annotation */}
+              <div className="absolute -top-12 -right-12 lg:-right-24 transform rotate-12 flex flex-col items-center">
+                <span className="text-2xl text-[#111827] leading-none mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
+                  Kudo. He&apos;s got your back.
+                </span>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#111827] rotate-45">
+                  <path d="M5 9l4-4 4 4" />
+                  <path d="M9 5v14" />
+                </svg>
               </div>
-              <div className="h-24 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-sm">
-                Connect Google Business
+
+              {/* Floating Notifications */}
+              <div className="absolute -bottom-10 -left-10 lg:-left-32 transform -rotate-6 z-20">
+                <NotificationCard 
+                  platform="Google"
+                  time="2m ago"
+                  text="Synced 14 new 5-star reviews from Google Business Profile. Wall of Love updated."
+                />
               </div>
-              <div className="h-24 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-sm">
-                Connect Twitter
+              <div className="absolute bottom-16 -left-4 lg:-left-20 transform rotate-3 z-10 opacity-90 scale-95">
+                <NotificationCard 
+                  platform="X"
+                  time="1h ago"
+                  text="Found 3 new mentions on X. Added to the carousel template queue."
+                />
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Fading Marquee Strip */}
-            <div className="absolute top-1/2 -translate-y-1/2 -right-32 lg:-right-48 w-[600px] h-[400px] -z-10 opacity-40 lg:opacity-100 rotate-12 mask-image-fade">
-              <div className="flex gap-4 animate-marquee hover:pause whitespace-nowrap pt-12">
-                {[...MOCK_REVIEWS, ...MOCK_REVIEWS].map((review, i) => (
-                  <div key={i} className="inline-block whitespace-normal">{review}</div>
-                ))}
+        {/* SECTION 1: WHAT IS KUDOGRID */}
+        <section className="py-24 px-6 max-w-6xl mx-auto border-t border-slate-200">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <div className="flex-1">
+              <p className="text-[#1b8b3d] text-sm font-bold tracking-widest uppercase mb-4">/01 · The Dead-Simple Widget</p>
+              <h2 className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">What is KudoGrid?</h2>
+              <p className="text-lg text-slate-600 leading-relaxed mb-6 font-medium">
+                KudoGrid connects to your X (Twitter) or Google accounts, scans for your best 4-5 star reviews, and automatically builds a beautiful Wall of Love for your site.
+              </p>
+              <p className="text-lg text-slate-600 leading-relaxed font-medium">
+                No coding required. Just connect your accounts, pick a template, and copy one line of code onto your website. Kudo handles the rest, forever.
+              </p>
+            </div>
+            <div className="flex-1 relative w-full flex justify-center lg:justify-end">
+              <div className="bg-white rounded-3xl p-8 border-4 border-[#111827] shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] transform rotate-2 max-w-md w-full">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center font-bold text-xl border-2 border-slate-200">
+                    S
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg">Sarah Jenkins</div>
+                    <div className="flex text-[#1b8b3d]">★★★★★</div>
+                  </div>
+                </div>
+                <p className="text-slate-700 text-lg leading-relaxed font-medium">
+                  &quot;I installed KudoGrid in 2 minutes. Our conversion rate instantly jumped 14%. The zero-code embed is exactly what we needed.&quot;
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* SOCIAL PROOF */}
-        <section className="py-12 border-y border-slate-100 bg-slate-50">
-          <div className="max-w-6xl mx-auto px-6 text-center">
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">Trusted by conversion-obsessed founders</p>
-            <div className="flex flex-wrap justify-center gap-12 lg:gap-24 opacity-40 grayscale">
-              {/* Minimalist Geometric Logomarks */}
-              <svg width="120" height="30" viewBox="0 0 120 30" fill="currentColor" className="text-slate-900"><path d="M0 15L15 0H30L15 15L30 30H15L0 15Z" /><text x="40" y="22" className="font-bold text-xl" fill="currentColor">ACME</text></svg>
-              <svg width="120" height="30" viewBox="0 0 120 30" fill="currentColor" className="text-slate-900"><circle cx="15" cy="15" r="10"/><circle cx="25" cy="15" r="10"/><text x="45" y="22" className="font-bold text-xl" fill="currentColor">NEXUS</text></svg>
-              <svg width="120" height="30" viewBox="0 0 120 30" fill="currentColor" className="text-slate-900"><rect x="0" y="5" width="20" height="20" /><rect x="10" y="0" width="20" height="20" fill="white" stroke="currentColor" strokeWidth="2"/><text x="45" y="22" className="font-bold text-xl" fill="currentColor">OASIS</text></svg>
-              <svg width="120" height="30" viewBox="0 0 120 30" fill="currentColor" className="text-slate-900"><path d="M0 30L15 0L30 30H0Z" /><text x="40" y="22" className="font-bold text-xl" fill="currentColor">PEAK</text></svg>
-            </div>
-          </div>
-        </section>
-
-        {/* HOW IT WORKS */}
-        <section id="features" className="py-24 px-6 max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">Set up once. Sell forever.</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">Skip the manual copy-pasting. We built a system that actively hunts for your best reviews and serves them to your visitors instantly.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <article className="bg-slate-50 p-10 border border-slate-100 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center mb-6 text-emerald-600">
-                <Share2 className="w-8 h-8" />
+        {/* SECTION 2: ONE WIDGET. EVERY TEMPLATE. */}
+        <section className="py-24 px-6 max-w-6xl mx-auto border-t border-slate-200">
+          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-32">
+            <div className="flex-1 flex flex-col items-center">
+              <SkateboardMascot className="w-[250px] h-[250px] lg:w-[350px] lg:h-[350px] mb-8" />
+              <div className="text-3xl text-[#111827] transform -rotate-3" style={{ fontFamily: "'Caveat', cursive" }}>
+                yeah, he does kickflips too.
               </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900">1. Connect</h3>
-              <p className="text-slate-600 leading-relaxed">Sync your Google, Twitter, or send custom collection links. We automatically filter out anything under 4 stars.</p>
-            </article>
-
-            <article className="bg-slate-50 p-10 border border-slate-100 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center mb-6 text-emerald-600">
-                <LayoutGrid className="w-8 h-8" />
+            </div>
+            <div className="flex-1">
+              <p className="text-[#1b8b3d] text-sm font-bold tracking-widest uppercase mb-4">/02 · Conversion Optimized</p>
+              <h2 className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">One tool. Every template.</h2>
+              <p className="text-lg text-slate-600 leading-relaxed mb-10 font-medium">
+                We do the design work. You get the conversions. Connect your tools and we&apos;ll automatically format your reviews into beautiful, high-performing UI components.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-[#1b8b3d] rounded-full flex items-center justify-center text-white shrink-0">✓</div>
+                  <span className="font-bold">Animated carousels</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-[#1b8b3d] rounded-full flex items-center justify-center text-white shrink-0">✓</div>
+                  <span className="font-bold">Static grid walls</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-[#1b8b3d] rounded-full flex items-center justify-center text-white shrink-0">✓</div>
+                  <span className="font-bold">Endless scrolling marquee</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-[#1b8b3d] rounded-full flex items-center justify-center text-white shrink-0">✓</div>
+                  <span className="font-bold">Zero-code drop-in install</span>
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900">2. Choose a Template</h3>
-              <p className="text-slate-600 leading-relaxed">Pick from animated scrolling walls, minimalist static grids, or elegant carousel sliders.</p>
-            </article>
+            </div>
+          </div>
+        </section>
 
-            <article className="bg-slate-50 p-10 border border-slate-100 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center mb-6 text-emerald-600">
-                <Code className="w-8 h-8" />
+        {/* SECTION 3: GREEN SETUP CARD */}
+        <section id="demo" className="py-24 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto bg-[#1b8b3d] rounded-[3rem] p-10 lg:p-20 flex flex-col lg:flex-row items-center gap-16 relative overflow-hidden">
+            {/* Background Blob */}
+            <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+
+            <div className="flex-1 z-10 text-white">
+              <p className="text-green-200 text-sm font-bold tracking-widest uppercase mb-4">— 1-MINUTE SETUP</p>
+              <h2 className="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6">You build.<br/>We convert.</h2>
+              <p className="text-lg text-green-50 mb-10 max-w-md font-medium leading-relaxed">
+                1. Connect accounts.<br/>
+                2. Pick a template.<br/>
+                3. Copy the code snippet. Done.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <Link href="/login" className="bg-white text-[#1b8b3d] hover:bg-slate-50 font-bold text-lg px-8 py-4 rounded-full w-full sm:w-auto transition-colors text-center shadow-xl">
+                  Try KudoGrid &rarr;
+                </Link>
+                <Link href="mailto:support@kudogrid.com" className="text-white hover:text-green-200 font-bold underline underline-offset-4 transition-colors">
+                  or email support@kudogrid.com
+                </Link>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900">3. Drop it in</h3>
-              <p className="text-slate-600 leading-relaxed">Copy one single line of code. Works flawlessly on WordPress, Webflow, Framer, and custom React sites.</p>
-            </article>
-          </div>
-        </section>
-
-        {/* LIVE DEMO MARQUEE */}
-        <section id="demo" className="py-24 bg-slate-900 overflow-hidden">
-          <div className="text-center mb-12 px-6">
-            <h2 className="text-3xl font-extrabold tracking-tight text-white mb-4">See it in action</h2>
-            <p className="text-slate-400">This is exactly what your customers will see on your site.</p>
-          </div>
-          
-          <div className="flex gap-6 animate-marquee hover:pause whitespace-nowrap">
-            {[...MOCK_REVIEWS, ...MOCK_REVIEWS, ...MOCK_REVIEWS].map((review, i) => (
-              <div key={i} className="inline-block whitespace-normal">{review}</div>
-            ))}
-          </div>
-          <div className="flex gap-6 animate-marquee hover:pause whitespace-nowrap mt-6" style={{ animationDirection: 'reverse' }}>
-            {[...MOCK_REVIEWS, ...MOCK_REVIEWS, ...MOCK_REVIEWS].reverse().map((review, i) => (
-              <div key={i} className="inline-block whitespace-normal">{review}</div>
-            ))}
-          </div>
-        </section>
-
-        {/* PRICING */}
-        <section id="pricing" className="py-24 px-6 max-w-6xl mx-auto bg-white">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">Simple, transparent pricing</h2>
-            <p className="text-lg text-slate-600">Start free. Upgrade when your revenue grows.</p>
-            
-            <div className="mt-8 inline-flex bg-slate-50 border border-slate-200 p-1">
-              <button className="px-6 py-2 bg-white border border-slate-200 shadow-sm font-bold text-sm text-slate-900">Monthly</button>
-              <button className="px-6 py-2 font-bold text-sm text-slate-500 hover:text-slate-900">Yearly <span className="text-emerald-600 ml-1">-20%</span></button>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Hobby Card */}
-            <div className="border border-slate-200 p-10 flex flex-col bg-white hover:border-slate-300 transition-colors">
-              <h3 className="text-2xl font-bold mb-2">Hobby</h3>
-              <p className="text-slate-500 mb-6 h-12">Perfect for validating a new idea.</p>
-              <div className="text-4xl font-extrabold mb-8">$0<span className="text-lg font-normal text-slate-400">/mo</span></div>
-              <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex items-center gap-3 text-slate-700">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  Up to 100 manual reviews
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  1 active widget
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  Basic static grid template
-                </li>
-              </ul>
-              <Link href="/login" className="w-full py-4 border border-slate-900 text-slate-900 font-bold text-center hover:bg-slate-50 transition-colors">Get Started</Link>
             </div>
 
-            {/* Pro Card */}
-            <div className="border-2 border-emerald-600 p-10 flex flex-col bg-white relative shadow-lg">
-              <div className="absolute top-0 right-10 -translate-y-1/2 bg-emerald-600 text-white font-bold text-xs px-3 py-1 uppercase tracking-wider">Most Popular</div>
-              <h3 className="text-2xl font-bold mb-2">Pro</h3>
-              <p className="text-slate-500 mb-6 h-12">For serious founders optimizing for conversion.</p>
-              <div className="text-4xl font-extrabold mb-8">$19<span className="text-lg font-normal text-slate-400">/mo</span></div>
-              <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex items-center gap-3 text-slate-700">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  Unlimited manual reviews
-                </li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  Auto-sync Twitter & Google
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  Unlimited active widgets
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-                  Animated marquee & carousels
-                </li>
-              </ul>
-              <Link href="/login" className="w-full py-4 bg-emerald-600 text-white font-bold text-center hover:bg-emerald-700 transition-colors">Start 14-Day Free Trial</Link>
+            <div className="flex-1 w-full z-10">
+              <div className="bg-[#111827] rounded-3xl p-6 border-4 border-[#0f172a] shadow-2xl transform rotate-2 mx-auto max-w-md">
+                <div className="flex gap-2 mb-6">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <div className="font-mono text-sm text-slate-300">
+                  <div className="text-emerald-400 mb-2">{/* 1. Drop this in your site */}</div>
+                  <div className="mb-4">
+                    <span className="text-pink-400">&lt;script</span> <span className="text-blue-300">src</span>=<span className="text-yellow-300">&quot;kudogrid.com/widget.js&quot;</span><span className="text-pink-400">&gt;&lt;/script&gt;</span>
+                  </div>
+                  <div className="text-emerald-400 mb-2">{/* 2. Place your Wall of Love */}</div>
+                  <div>
+                    <span className="text-pink-400">&lt;div</span> <span className="text-blue-300">id</span>=<span className="text-yellow-300">&quot;kudo-wall&quot;</span><span className="text-pink-400">&gt;&lt;/div&gt;</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
+
       </main>
 
       {/* FOOTER */}
-      <footer className="border-t border-slate-100 bg-slate-50 py-16">
+      <footer className="border-t border-slate-200 py-16 mt-12 bg-white">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start gap-10">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Mascot className="w-8 h-8" />
-              <span className="font-bold text-lg text-slate-900">KudoGrid</span>
+            <div className="flex items-center gap-3 mb-6">
+              <MascotSVG className="w-8 h-8" />
+              <span className="font-extrabold text-xl tracking-tight text-[#111827]">KUDOGRID</span>
             </div>
-            <p className="text-slate-500 text-sm max-w-xs mb-8">
-              Building trust shouldn&apos;t be hard. Turn your happiest customers into your most effective marketing channel automatically.
+            <p className="text-slate-500 text-sm max-w-xs mb-8 font-medium">
+              Turn your happiest customers into your most effective marketing channel automatically.
             </p>
-            <p className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} KudoGrid. All rights reserved.</p>
+            <p className="text-slate-400 text-sm font-bold">&copy; {new Date().getFullYear()} KudoGrid. All rights reserved.</p>
           </div>
 
           <div className="flex gap-16">
-            <div className="flex flex-col gap-3">
-              <span className="font-bold text-slate-900 mb-2">Product</span>
-              <Link href="#features" className="text-sm text-slate-500 hover:text-slate-900">Features</Link>
-              <Link href="#pricing" className="text-sm text-slate-500 hover:text-slate-900">Pricing</Link>
-              <Link href="#demo" className="text-sm text-slate-500 hover:text-slate-900">Templates</Link>
+            <div className="flex flex-col gap-4">
+              <span className="font-bold text-[#111827] uppercase tracking-widest text-xs">Product</span>
+              <Link href="/login" className="text-sm font-bold text-slate-500 hover:text-[#1b8b3d]">Sign in</Link>
+              <Link href="/login" className="text-sm font-bold text-slate-500 hover:text-[#1b8b3d]">Start free trial</Link>
             </div>
-            <div className="flex flex-col gap-3">
-              <span className="font-bold text-slate-900 mb-2">Legal</span>
-              <Link href="/privacy" className="text-sm text-slate-500 hover:text-slate-900">Privacy Policy</Link>
-              <Link href="/terms" className="text-sm text-slate-500 hover:text-slate-900">Terms of Service</Link>
+            <div className="flex flex-col gap-4">
+              <span className="font-bold text-[#111827] uppercase tracking-widest text-xs">Legal</span>
+              <Link href="/privacy" className="text-sm font-bold text-slate-500 hover:text-[#1b8b3d]">Privacy Policy</Link>
+              <Link href="/terms" className="text-sm font-bold text-slate-500 hover:text-[#1b8b3d]">Terms of Service</Link>
             </div>
           </div>
         </div>
